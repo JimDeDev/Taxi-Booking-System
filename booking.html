@@ -5,11 +5,52 @@
         <title>Book a Taxi</title>
         <!-- <meta name="description" content=""> -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="style/style.css">
+        <link rel="stylesheet" href="style.css">
+        <script type="text/javascript" src="booking.js"></script>  
     </head>
     <body>
         <h1>Book a Taxi</h1>
-        
-        <!-- <script src="" async defer></script> -->
+        <div id="content">
+
+            <form name="bookingForm" id="bookingForm">
+                <label for="custName">Name: </label>
+                <input type="text" id="custName" name="custName">
+                <br>
+                <label for="custPhone">Phone: </label>
+                <input type="text" id="custPhone" name="custPhone">
+                <br><br>
+    
+                <label class="form-title">Pickup</label><br>
+                <label for="unitNumber">Unit Number: </label>
+                <input type="text" id="unitNumber" name="unitNumber">
+                <br>
+                <label for="streetNumber">Street Number: </label>
+                <input type="text" id="streetNumber" name="streetNumber">
+                <br>
+                <label for="streetName">Street Name: </label>
+                <input type="text" id="streetName" name="streetName">
+                <br>
+                <label for="suburb">Suburb: </label>
+                <input type="text" id="suburb" name="suburb">
+                <br><br>
+    
+                <label class="form-title">Destination</label><br>
+                <label for="destSuburb">Suburb: </label>
+                <input type="text" id="destSuburb" name="destSuburb">
+                <br><br>
+    
+                <label class="form-title">Details</label><br>
+                <label for="noOfPax">Number of Passengers: </label>
+                <input type="number" id="noOfPax" name="noOfPax">
+                <br>
+                <label for="pickupDate">Pickup Date: <a href="#Details" onclick="setDateToToday()">Today</a></label>
+                <input type="date" id="pickupDate" name="pickupDate">
+                <br>
+                <label for="pickupTime">Pickup Time: </label>
+                <input type="time" id="pickupTime" name="pickupTime">
+                <br>
+                <input type="button" value="Make Booking" onclick="submitBooking()">
+            </form>
+        </div>
     </body>
 </html>
