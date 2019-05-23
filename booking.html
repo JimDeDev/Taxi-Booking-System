@@ -1,17 +1,17 @@
 <!DOCTYPE html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Book a Taxi</title>
-        <!-- <meta name="description" content=""> -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="booking.js"></script>  
     </head>
     <body>
-        <h1>Book a Taxi</h1>
+        <header>
+            <h1>Book a Taxi</h1>
+        </header>       
+  
+        </div>
         <div id="content">
-
             <form name="bookingForm" id="bookingForm">
                 <label for="custName">Name: </label>
                 <input type="text" id="custName" name="custName">
@@ -43,7 +43,7 @@
                 <label for="noOfPax">Number of Passengers: </label>
                 <input type="number" id="noOfPax" name="noOfPax">
                 <br>
-                <label for="pickupDate">Pickup Date: <a href="#Details" onclick="setDateToToday()">Today</a></label>
+                <label for="pickupDate">Pickup Date: <a href="#Today" onclick="setDateToToday()">Today</a></label>
                 <input type="date" id="pickupDate" name="pickupDate">
                 <br>
                 <label for="pickupTime">Pickup Time: </label>
@@ -52,5 +52,8 @@
                 <input type="button" value="Make Booking" onclick="submitBooking()">
             </form>
         </div>
+        <footer>
+            <p>This is the footer</p>
+        </footer>
     </body>
 </html>

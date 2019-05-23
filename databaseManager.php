@@ -19,8 +19,8 @@
 	function db_connect() {
 		// connect to the database
 		require_once("../../conf/settings.php");
-		$this->conn = mysqli_connect($dbHost, $dbUser, $dbPass, $db)
-		  or die("<p>The database server is not available.</p>");
+		$this->conn = @mysqli_connect($dbHost, $dbUser, $dbPass, $db);
+		  // or die("<p>The database server is not available.</p>");
 	}
 
     public function create_tables() {
@@ -38,7 +38,8 @@
         `bookingTime` datetime NOT NULL,
         `status` varchar(15) NOT NULL DEFAULT 'unassigned');";
 
-      $results = mysqli_query($this->conn, $query) or die("<p>Table creation script failed.</p>");
+      @mysqli_query($this->conn, $query);
+      //  or die("<p>Table creation script failed.</p>");
     }
 
     public function save($booking) {
@@ -56,7 +57,12 @@
         '{$booking['pickupTime']}', 
         '{$booking['bookingTime']}');";
 
-      return mysqli_query($this->conn, $query) or die("<p>insert script failed.</p>");
+      @mysqli_query($this->conn, $query);
+      // or die("<p>insert script failed.</p>");
+    }
+
+    public function isConnected() {
+      return $this->conn;
     }
   }
 ?>

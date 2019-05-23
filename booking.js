@@ -46,7 +46,7 @@ function submitBooking() {
 
     if (formItems.pickupDate.value != "" && formItems.pickupTime.value != "") {
         var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
-    
+
         if (inputDate < currentTime) {
             valid = false;
             document.getElementById('pickupDate').style.borderColor = 'red';
@@ -55,15 +55,14 @@ function submitBooking() {
 
     } else {
         valid = false;
-            document.getElementById('pickupDate').style.borderColor = 'red';
-            document.getElementById('pickupTime').style.borderColor = 'red';
+        document.getElementById('pickupDate').style.borderColor = 'red';
+        document.getElementById('pickupTime').style.borderColor = 'red';
     }
 
     if (valid) {
         console.log("Saving to DB");
         saveBooking(formItems);
     }
-    return valid;
 }
 
 function saveBooking(formItems) {
@@ -74,13 +73,14 @@ function saveBooking(formItems) {
     xHRObject.open("POST", "saveBooking.php");
 
     xHRObject.onreadystatechange = processServerResponse;
-    xHRObject.send(formData);  
+    xHRObject.send(formData);
 }
 
-
 function processServerResponse() {
-    if ((xHRObject.readyState == 4) &&(xHRObject.status == 200)) {
-        
+    var contentDiv = document.getElementById('content');
+
+    if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
+
         console.log("Response Text");
         console.log(xHRObject.responseText);
 
@@ -89,15 +89,43 @@ function processServerResponse() {
         console.log("Response Text as JSON");
         console.log(booking);
 
-        var contentDiv = document.getElementById('content');
+        var bookingDiv = document.createElement('div');
+        bookingDiv.className = 'booking-card';
+        var title = document.createElement('h3');
+        title.innerText = 'Booking successful!';
+        bookingDiv.appendChild(title);
 
+        var bookingRefNode = document.createElement('p')
+        bookingRefNode.innerHTML = '<b>Booking Reference: </b>' + booking.bookingRef;
+        bookingDiv.appendChild(bookingRefNode);
         
-        var bookingHTML = "<h2>Big Success!</h2>";
-        bookingHTML += booking.bookingRef + '<br>';
-        bookingHTML += booking.custName + '<br>';
-        bookingHTML += booking.custPhone + '<br>';
+        var custNameNode = document.createElement('p')
+        custNameNode.innerHTML = '<b>Customer Name: </b>' + booking.custName;
+        bookingDiv.appendChild(custNameNode);
+        
+        var custPhoneNode = document.createElement('p')
+        custPhoneNode.innerHTML = '<b>Customer Phone: </b>' + booking.custPhone;
+        bookingDiv.appendChild(custPhoneNode);
+        
+        var pickupAddress = booking.streetNumber + booking.unitNumber + ' ' + booking.streetName + ', ' + booking.suburb;
 
-        contentDiv.innerHTML = bookingHTML;
+        var pickupAddressNode = document.createElement('p')
+        pickupAddressNode.innerHTML = '<b>Pickup Address: </b>' + pickupAddress;
+        bookingDiv.appendChild(pickupAddressNode);
+        
+        var pickupTimeNode = document.createElement('p')
+        pickupTimeNode.innerHTML = '<b>Pickup Time: </b>' + booking.pickupTime;
+        bookingDiv.appendChild(pickupTimeNode);
+
+        contentDiv.removeChild(document.getElementById('bookingForm'));
+        contentDiv.appendChild(bookingDiv);
+
+    } else if (xHRObject.readyState == 4 && xHRObject.status == 500) {
+        var errorMessage = document.createElement('p');
+        errorMessage.innerHTML = "There was an error processing your request";
+        errorMessage.style.color = "red";
+        contentDiv.appendChild(errorMessage);
+
     }
 }
 
