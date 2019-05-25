@@ -9,8 +9,7 @@
     }
 
     // Closing connection on destruction
-    public function __destruct()
-    {
+    public function __destruct(){
       if ($this->conn) {
         mysqli_close($this->conn);
       }
@@ -18,13 +17,13 @@
 
 	function db_connect() {
 		// connect to the database
-		require_once("../../conf/settings.php");
+    require_once("../../conf/settings.php");
 		$this->conn = @mysqli_connect($dbHost, $dbUser, $dbPass, $db);
 		  // or die("<p>The database server is not available.</p>");
 	}
 
     public function create_tables() {
-      //Prepare the tables if they are not already created
+      //Prepare the table if it is not already created
       $query = "CREATE TABLE IF NOT EXISTS `bookings` (
         `bookingRef` varchar(18) NOT NULL PRIMARY KEY,
         `custName` varchar(30) NOT NULL,
@@ -43,7 +42,6 @@
     }
 
     public function save($booking) {
-
       $query = "INSERT INTO `bookings`(`bookingRef`, `custName`, `custPhone`, `unitNumber`, `streetNumber`, `streetName`, `suburb`, `destSuburb`, `pickupTime`,`bookingTime`) 
       VALUES (
         '{$booking['bookingRef']}',
@@ -59,6 +57,28 @@
 
       @mysqli_query($this->conn, $query);
       // or die("<p>insert script failed.</p>");
+    }
+
+    public function getBookings() {
+      $query = "SELECT * FROM bookings 
+        WHERE status = 'unassigned'
+        AND pickupTime < (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR)
+        AND pickupTime > (CURRENT_TIMESTAMP())";
+
+      $result = @mysqli_query($this->conn, $query);
+      // or die("<p>select all script failed.</p>");
+
+      return $result;
+    }
+
+    public function updateBookingStatus($bookingRef, $status) {
+      $query = "UPDATE bookings 
+        SET status = '{$status}' 
+        WHERE bookingRef = '{$bookingRef}';";
+
+      $success = @mysqli_query($this->conn, $query);
+      // or die("<p>insert script failed.</p>");
+      return $success;
     }
 
     public function isConnected() {

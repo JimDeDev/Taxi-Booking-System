@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `bookingTime` datetime NOT NULL,
   `status` varchar(15) NOT NULL DEFAULT 'unassigned');
 
-  ## Example Booking Insert (Missing bookingRef and status as they are automatically populated)
+  ## Example Booking Insert (Missing status as it isautomatically populated)
   INSERT INTO `bookings`(
     `custName`,
     `custPhone`,
@@ -27,4 +27,10 @@ CREATE TABLE IF NOT EXISTS `bookings` (
     `destSuburb`,
     `pickupTime`,
     `bookingTime`) 
-  VALUES ('matt', '0275033693', 'A', '33', 'Hamon Ave', 'Mount Roskill', 'Avondale', '2019-05-19 00:00:00', '2019-05-19 00:00:00');
+  VALUES ('matt', '0275033693', 'A', '22', 'Simon Ave', 'Mount Roskill', 'Avondale', '2019-05-19 00:00:00', '2019-05-19 00:00:00');
+
+## Selecting all booking within the next two hours
+SELECT * FROM bookings WHERE pickupTime < (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR)
+
+## Command used to set all bookings to unassigned
+UPDATE bookings SET status = 'unassigned';

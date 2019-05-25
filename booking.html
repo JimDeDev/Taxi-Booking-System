@@ -1,17 +1,26 @@
 <!DOCTYPE html>
     <head>
-        <meta charset="utf-8">
-        <title>Book a Taxi</title>
-        <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="booking.js"></script>  
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <title>CabsOnline</title>
+            <meta name="description" content="Come book a cab with us today!">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="style.css">
+            <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+            <script type="text/javascript" src="xhr.js"></script>  
+            <script type="text/javascript" src="booking.js"></script>  
+            <script defer type="text/javascript" src="pageBuilder.js"></script>  
     </head>
     <body>
-        <header>
-            <h1>Book a Taxi</h1>
-        </header>       
+        <header id="header"></header>
   
         </div>
-        <div id="content">
+        <div id= "content" class="content">
+            <h1>Make A Booking</h1>
+            <div id="message"> 
+                <p>Fill out the form below to request a cab</p>
+
+            </div>
             <form name="bookingForm" id="bookingForm">
                 <label for="custName">Name: </label>
                 <input type="text" id="custName" name="custName">
@@ -52,8 +61,5 @@
                 <input type="button" value="Make Booking" onclick="submitBooking()">
             </form>
         </div>
-        <footer>
-            <p>This is the footer</p>
-        </footer>
     </body>
 </html>

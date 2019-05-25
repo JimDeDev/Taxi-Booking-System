@@ -1,9 +1,4 @@
-var xHRObject = false;
-if (window.XMLHttpRequest) {
-    xHRObject = new XMLHttpRequest();
-} else if (window.ActiveXObject) {
-    xHRObject = new ActiveXObject("Microsoft.XMLHTTP");
-}
+var xHRObject = createRequest();
 
 function submitBooking() {
     console.log("submitBooking called");
@@ -66,17 +61,15 @@ function submitBooking() {
 }
 
 function saveBooking(formItems) {
-    console.log("saveBooking");
-
     formData = new FormData(formItems);
 
     xHRObject.open("POST", "saveBooking.php");
 
-    xHRObject.onreadystatechange = processServerResponse;
+    xHRObject.onreadystatechange = processBookingResponse;
     xHRObject.send(formData);
 }
 
-function processServerResponse() {
+function processBookingResponse() {
     var contentDiv = document.getElementById('content');
 
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {

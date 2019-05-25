@@ -1,11 +1,72 @@
 html {
     background-color: #6B5E62;
-}
+    text-align: center;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
 
 body {
+  position: relative;
+  display: inline-block;
   width: 80%;
-  background-color: #EAFFFD;
+  background-color: #f2f2f2;
+  margin-bottom: 50px;
+
 }
+
+header {
+  display: flex;
+  /* text-align: left; */
+  padding: 10px;
+  background-color: yellow;
+}
+
+.nav {
+  list-style: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-inline-start: 10px
+}
+
+header > h1 {
+  color: red;
+  transform: rotate(20deg);
+  height: 50px;
+  margin-top: 2em
+}
+
+
+
+.nav > li {
+  background-color: white;
+  margin-bottom: 1px;
+
+}
+
+.nav > li:hover{
+  background-color: grey;
+  margin-bottom: 1px;
+}
+
+a { 
+  color: black;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+
+}
+
+.content {
+  text-align: left;
+  padding: 20px;
+}
+
+.content > img {
+  display: block;
+  width: 40%;
+  float: right;
+  margin-bottom: 50px;
+}
+
 
 .booking-card {
   padding: 10px;
@@ -19,8 +80,6 @@ h1 {
 .form-title {
     font-weight: bold;
 }
-
-/* Style from W3 Schools */
 
 input[type=text], select {
     width: 100%;
@@ -63,15 +122,17 @@ input[type=text], select {
     cursor: pointer;
   }
   
-  input[type=submit]:hover {
-    background-color: #45a049;
+  input[type=button]:hover {
+    background-color: yellow;
+  }
+
+  .smallButton {
+    width: 100px;
   }
   
   form {
-    width: 50%;
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
   }
 
-  /* Style from W3 Schools */

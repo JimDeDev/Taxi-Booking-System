@@ -1,26 +1,37 @@
 <!DOCTYPE html>
     <head>
         <meta charset="utf-8">
-        <title>Taxi Admin</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>CabsOnline Admin</title>
+        <meta name="description" content="Come book a cab with us today!">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="style.css">
-        <script type="text/javascript" src="admin.js"></script>  
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <script defer type="text/javascript" src="pageBuilder.js"></script>  
+        <script type="text/javascript" src="xhr.js"></script>
+        <script defer type="text/javascript" src="admin.js"></script>  
     </head>
     <body>
-        <header>
-            <h1>Taxi Admin</h1>
-        </header>       
+        <header id="header"></header>       
   
-        </div>
-        <div id="controls">
-            <input type="button" value="View Bookings" onclick="viewBookings()"><br>
-            <input type="text" name="bookingRef" id="bookingRef" value="BID_">
-            <input type="button" value="Assign Taxi" onclick="viewBookings()">
+        <div class='content' id="content">
+            <h1>Admin Panel - Authorized Personnel Only</h1>
+            <p>Click View Pickup Requests to see all unassigned pickups within the next two hours.</p>
+            <p>Enter a booking Reference in the text area and click Assign Cab to fulfil a request.</p>
+            <div id="controls" style="display: flex; flex-direction: column">
+                    
+                <form id="assignForm" style="display: flex;">
+                    <input type="button" value="View Pickup Requests" onclick="viewBookings()"><br>
+                    <input type="button" value="Assign Cab" onclick="assignTaxi()">
+                    <input type="text" name="bookingRef" id="bookingRef" value="BID_">
+                </form>
+                
+            </div>
+            <div id="message"></div>
+            <table class="w3-table-all" id="bookings"></table>
 
         </div>
-        <div id="content">
-        </div>
-        <footer>
-            <p>This is the footer</p>
-        </footer>
+
     </body>
 </html>
