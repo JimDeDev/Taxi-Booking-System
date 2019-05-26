@@ -1,10 +1,7 @@
 <!DOCTYPE html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>CabsOnline Admin</title>
-        <meta name="description" content="Come book a cab with us today!">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet">
@@ -23,15 +20,13 @@
                     
                 <form id="assignForm" style="display: flex;">
                     <input type="button" value="View Pickup Requests" onclick="viewBookings()"><br>
-                    <input type="button" value="Assign Cab" onclick="assignTaxi()">
                     <input type="text" name="bookingRef" id="bookingRef" value="BID_">
+                    <input type="button" value="Assign Cab" onclick="assignTaxi()">
                 </form>
-                
+
             </div>
             <div id="message"></div>
             <table class="w3-table-all" id="bookings"></table>
-
         </div>
-
     </body>
 </html>

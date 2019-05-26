@@ -34,3 +34,7 @@ SELECT * FROM bookings WHERE pickupTime < (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR
 
 ## Command used to set all bookings to unassigned
 UPDATE bookings SET status = 'unassigned';
+
+## Command used to set all pickup times to 2 hours from now
+UPDATE bookings SET pickupTime = (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR)
+

@@ -1,4 +1,11 @@
 <?php
+  /**
+   * The DatabaseManager class is used by any php file that
+   * needs to access the database
+   * This class provides functionality to query the database for bookings 
+   * and functions to change the status of a booking.
+   */
+
   class DatabaseManager {
 
     private $conn;
@@ -59,6 +66,9 @@
       // or die("<p>insert script failed.</p>");
     }
 
+    // This function will return a resultset containing 
+    // all bookings where pickupTime is between 
+    // the current time and 2 hours from the current time
     public function getBookings() {
       $query = "SELECT * FROM bookings 
         WHERE status = 'unassigned'
@@ -71,18 +81,40 @@
       return $result;
     }
 
+    // This function will update a bookings status with the 
+    // given status if the bookingRef matched a booking
     public function updateBookingStatus($bookingRef, $status) {
-      $query = "UPDATE bookings 
-        SET status = '{$status}' 
-        WHERE bookingRef = '{$bookingRef}';";
 
-      $success = @mysqli_query($this->conn, $query);
-      // or die("<p>insert script failed.</p>");
-      return $success;
+      $bookingExists = $this->getBooking($bookingRef);
+
+      if ($bookingExists) {
+        $query = "UPDATE bookings 
+          SET status = '{$status}' 
+          WHERE bookingRef = '{$bookingRef}'
+          AND status = 'unassigned';"; 
+  
+        @mysqli_query($this->conn, $query);
+        // or die("<p>insert script failed.</p>");
+      }
+      return $bookingExists;
     }
 
+    // Returns true if connection is active
+    // or false if connection is dead
     public function isConnected() {
       return $this->conn;
+    }
+
+    // This function takes a bookingRed and will 
+    // return 1 if booking exists or 0 if not
+    public function getBooking($bookingRef) {
+      $query = "SELECT * FROM bookings 
+      WHERE bookingRef = '{$bookingRef}'";
+
+      $result = @mysqli_query($this->conn, $query);
+      // or die("<p>insert script failed.</p>");
+
+      return mysqli_num_rows($result);
     }
   }
 ?>

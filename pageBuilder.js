@@ -1,15 +1,16 @@
-
+/**
+ * This JavaScript file is used to generate static elements
+ * that are present on every page of the website
+ */
 var header = document.getElementById('header');
 var footer = document.getElementById('footer');
 
 const navLinks = [
     {'name': 'Home', 'link': 'index.html'},
     {'name': 'Book A Cab', 'link': 'booking.html'},
-    {'name': 'About The Site', 'link': 'readme.md'},
     {'name': 'Admin Panel', 'link': 'admin.html'}
 ]
 const slogan = "BOOK A CAB TODAY!!";
-
 
 addLogo();
 addNav();

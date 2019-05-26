@@ -1,6 +1,11 @@
+/**
+ * This file contains functions that are used on the admin.html page
+ * These functions include viewBookings and assignTaxi.
+ */
+
 var xHRObject = createRequest();
 
-const tableHeadings = ['Booking Ref', 'Customer Name', 'Customer Phone', 'Pickup Suburb', 'Dest Suburb', 'PickupTime'];
+const tableHeadings = ['Booking Ref', 'Customer Name', 'Customer Phone', 'Pickup Suburb', 'Dest Suburb', 'Pickup Time'];
 
 var messageDiv = document.getElementById('message');
 
@@ -18,54 +23,50 @@ function viewBookings() {
 function assignTaxi() {
     formData = new FormData(document.forms.assignForm);
 
-    var found = true;
-    // if (bookings != null) {
+    if (xHRObject) {
+        xHRObject.open("POST", "assignTaxi.php");
 
-    //     bookings.map((booking) => {
-    //         console.log(booking.bookingRef + " " + formData.get('bookingRef'));
-    //         if (formData.bookingRef == booking.bookingRef) {
-    //             found = true;
-    //             console.log('Found!!');
-    //         }
-    //     })
-    // }
-
-    if (found) {
-            if (xHRObject) {
-                xHRObject.open("POST", "assignTaxi.php");
-        
-                xHRObject.onreadystatechange = assignResponse;
-                xHRObject.send(formData);    
-            } else console.log('XHR error'); 
-
-    } else {
-        // First clear the message area
-        messageDiv.innerHTML = "";
-
-        // Create the message element
-        var bookingFail = document.createElement('p');
-        bookingFail.style.color = 'red';
-        bookingFail.innerText = 'That booking reference is not valid or already booked';
-        
-        //Append it to the message div
-        messageDiv.appendChild(bookingFail);
-    }
+        xHRObject.onreadystatechange = assignResponse;
+        xHRObject.send(formData);    
+    } else console.log('XHR error'); 
 }
 
 function assignResponse() {
+
+
 
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
 
         // First clear the message area
         messageDiv.innerHTML = "";
+        console.log(xHRObject.responseText);
+        console.log(xHRObject.status);
 
         // Create the message element
-        var bookingSuccess = document.createElement('p');
-        bookingSuccess.innerText = xHRObject.responseText + ' has been successfully assigned.';
+        var bookingMessage = document.createElement('p');
+        
+        if (xHRObject.responseText != '0') {
+            bookingMessage.style.color = 'unset';
+            bookingMessage.innerText = xHRObject.responseText + ' has been successfully assigned.';
+        } else {
+            bookingMessage.style.color = 'red';
+            bookingMessage.innerText = 'There are no bookings matching that reference.';
+        }
         
         //Append it to the message div
-        messageDiv.appendChild(bookingSuccess);
+        messageDiv.appendChild(bookingMessage);
+        // Update the booking table
         viewBookings();
+    } else if ((xHRObject.readyState == 4) && (xHRObject.status == 500)) {
+
+        // First clear the message area
+        messageDiv.innerHTML = "";
+
+        // If there was a server error then an error will be shown 
+        var errorMessage = document.createElement('p');
+        errorMessage.innerHTML = "There was an error processing your request. Please retry in a few minutes.";
+        errorMessage.style.color = "red";
+        messageDiv.appendChild(errorMessage);
     }
 }
 

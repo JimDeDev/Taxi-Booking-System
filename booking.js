@@ -1,5 +1,16 @@
+/**
+ * This file is used on the booking.html page.
+ * it contains functions such as form validation
+ * and saveBooking
+ */
+
 var xHRObject = createRequest();
 
+// Preloading the date field with today
+setDateToToday();
+var messageDiv = document.getElementById('message');
+
+// This function will validate the inputs and save to db if valid
 function submitBooking() {
     console.log("submitBooking called");
 
@@ -40,8 +51,9 @@ function submitBooking() {
     }
 
     if (formItems.pickupDate.value != "" && formItems.pickupTime.value != "") {
-        var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
 
+        // Verifying that the given date and time is past the current time
+        var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
         if (inputDate < currentTime) {
             valid = false;
             document.getElementById('pickupDate').style.borderColor = 'red';
@@ -57,6 +69,13 @@ function submitBooking() {
     if (valid) {
         console.log("Saving to DB");
         saveBooking(formItems);
+    } else {
+        messageDiv.innerHTML = "";
+        var errorMessage = document.createElement('p');
+        errorMessage.innerText = "There was an issue with your details, please fix any fields marked in red and try again.";
+        errorMessage.style.color = "red";
+
+        messageDiv.appendChild(errorMessage);
     }
 }
 
@@ -70,58 +89,46 @@ function saveBooking(formItems) {
 }
 
 function processBookingResponse() {
-    var contentDiv = document.getElementById('content');
 
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
 
-        console.log("Response Text");
-        console.log(xHRObject.responseText);
-
+        // Parse the response text to get JSON 
         const booking = JSON.parse(xHRObject.responseText);
 
-        console.log("Response Text as JSON");
-        console.log(booking);
+        // Clear the form and message div
+        messageDiv.innerHTML = "";
+        document.getElementById('bookingForm').style.display ='none';
 
-        var bookingDiv = document.createElement('div');
-        bookingDiv.className = 'booking-card';
+        // Create message elements and append them to message div
         var title = document.createElement('h3');
         title.innerText = 'Booking successful!';
-        bookingDiv.appendChild(title);
+        messageDiv.appendChild(title);
 
-        var bookingRefNode = document.createElement('p')
-        bookingRefNode.innerHTML = '<b>Booking Reference: </b>' + booking.bookingRef;
-        bookingDiv.appendChild(bookingRefNode);
-        
-        var custNameNode = document.createElement('p')
-        custNameNode.innerHTML = '<b>Customer Name: </b>' + booking.custName;
-        bookingDiv.appendChild(custNameNode);
-        
-        var custPhoneNode = document.createElement('p')
-        custPhoneNode.innerHTML = '<b>Customer Phone: </b>' + booking.custPhone;
-        bookingDiv.appendChild(custPhoneNode);
-        
-        var pickupAddress = booking.streetNumber + booking.unitNumber + ' ' + booking.streetName + ', ' + booking.suburb;
+        // Create date object to extract time and date
+        var date = new Date(booking.pickupTime);
 
-        var pickupAddressNode = document.createElement('p')
-        pickupAddressNode.innerHTML = '<b>Pickup Address: </b>' + pickupAddress;
-        bookingDiv.appendChild(pickupAddressNode);
-        
-        var pickupTimeNode = document.createElement('p')
-        pickupTimeNode.innerHTML = '<b>Pickup Time: </b>' + booking.pickupTime;
-        bookingDiv.appendChild(pickupTimeNode);
+        var messageElement = document.createElement('p');
+        messageElement.innerHTML = "Thank you! Your booking reference  number  is <b>" 
+        + booking.bookingRef + ".</b><br> You will be picked up in front of your provided address at <b>" 
+        + date.toLocaleTimeString() + "</b> on the <b>" + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ".</b>";
+        messageDiv.appendChild(messageElement);
 
-        contentDiv.removeChild(document.getElementById('bookingForm'));
-        contentDiv.appendChild(bookingDiv);
+        var newBookingButton = document.createElement('input');
+        newBookingButton.setAttribute('type', 'button');
+        newBookingButton.setAttribute('onclick', 'location.reload()');
+        newBookingButton.setAttribute('value', 'Make Another Booking');
+        messageDiv.appendChild(newBookingButton);
 
-    } else if (xHRObject.readyState == 4 && xHRObject.status == 500) {
+    } else {
+        // If there was a server error then an error will be shown 
         var errorMessage = document.createElement('p');
-        errorMessage.innerHTML = "There was an error processing your request";
+        errorMessage.innerHTML = "There was an error processing your request. Please retry in a few minutes.";
         errorMessage.style.color = "red";
-        contentDiv.appendChild(errorMessage);
-
+        messageDiv.appendChild(errorMessage);
     }
 }
 
+// This helper function will reset all input box border colours
 function resetFormBorders() {
     document.getElementById('custName').style.borderColor = '#ccc';
     document.getElementById('custPhone').style.borderColor = '#ccc';
@@ -133,12 +140,16 @@ function resetFormBorders() {
     document.getElementById('pickupTime').style.borderColor = '#ccc';
 }
 
+// This function is called after page load to set dateField value and min to today
 function setDateToToday() {
     var date = new Date();
-    document.getElementById('pickupDate').value = date.getFullYear() + "-" + addLeadingZero(date.getMonth() + 1) + "-" + addLeadingZero(date.getDate());
+    var todayString = date.getFullYear() + "-" + addLeadingZero(date.getMonth() + 1) + "-" + addLeadingZero(date.getDate());
+    var dateField = document.getElementById('pickupDate');
+    dateField.value = todayString;
+    dateField.setAttribute('min', todayString);
 
 }
-
+// This helper function appends leading 0s to date segments
 function addLeadingZero(aDateSegment) {
     if (aDateSegment < 10) return "0" + aDateSegment;
     return aDateSegment;
