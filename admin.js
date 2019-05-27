@@ -1,16 +1,23 @@
 /**
+ * Web Development Assignment 2 - S1 2019
+ * Name: Jaime king 
+ * ID: 16959932  
+ * 
  * This file contains functions that are used on the admin.html page
  * These functions include viewBookings and assignTaxi.
  */
 
 var xHRObject = createRequest();
-
+// This array holds the headings for the booking table
 const tableHeadings = ['Booking Ref', 'Customer Name', 'Customer Phone', 'Pickup Suburb', 'Dest Suburb', 'Pickup Time'];
 
 var messageDiv = document.getElementById('message');
 
 var bookings = null;
-
+/**
+ * This function is called by the user
+ * It will send an XHR request to the back end to retrieve bookings
+ */
 function viewBookings() {
     if (xHRObject) {
         xHRObject.open("GET", "viewBookings.php");
@@ -20,6 +27,10 @@ function viewBookings() {
     } else console.log('XHR error'); 
 }
 
+/**
+ * This function is called by the user
+ * It will send an XHR request to the back end with a bookingRef to assign a taxi
+ */
 function assignTaxi() {
     formData = new FormData(document.forms.assignForm);
 
@@ -42,13 +53,15 @@ function assignResponse() {
         // Create the message element
         var bookingMessage = document.createElement('p');
         
-        if (xHRObject.responseText != '0') {
-            bookingMessage.innerText = 'The  booking request ' + xHRObject.responseText + ' has been properly assigned.';
-        } else {
+        // If the XHR object returns 0 then the booking does not exist
+        if (xHRObject.responseText == '0') {
             bookingMessage.className = 'error-message';
             bookingMessage.innerText = 'There are no bookings matching that reference.';
+        } else {
+            bookingMessage.innerText = 'The  booking request ' + xHRObject.responseText + ' has been properly assigned.';
         }
 
+        // Emptying the bookingRef text field
         document.getElementById('bookingRef').value = '';
         
         //Append it to the message div
@@ -75,8 +88,10 @@ function updateBookingsList() {
 
         bookings = JSON.parse(xHRObject.responseText);
 
+        // First clearing the table 
         bookingsTable.innerHTML = "";
         
+        // Creating the table headings 
         var tableHead = document.createElement('thead');
         var tableRow = document.createElement('tr');
         tableHeadings.map((heading) => {
@@ -87,6 +102,7 @@ function updateBookingsList() {
         tableHead.appendChild(tableRow);
         bookingsTable.appendChild(tableHead);
 
+        // Creating a table row for each booking
         bookings.map((b) => {
             var tr = document.createElement('tr');
 

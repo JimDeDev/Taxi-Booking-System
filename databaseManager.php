@@ -10,6 +10,10 @@
 
     private $conn;
 
+    /**
+     * Database constructor
+     * This will connect and create the table
+     */
     public function __construct() {
       $this->db_connect();
       $this->create_tables();
@@ -22,15 +26,17 @@
       }
     }
 
-	function db_connect() {
-		// connect to the database
-    require_once("../../conf/settings.php");
-		$this->conn = @mysqli_connect($dbHost, $dbUser, $dbPass, $db);
-		  // or die("<p>The database server is not available.</p>");
-	}
+    // Connect to the database
+    function db_connect() {
+      require_once("../../conf/settings.php");
+      $this->conn = @mysqli_connect($dbHost, $dbUser, $dbPass, $db);
+    }
 
+    /**
+     * This function will create the table if it
+     * is nor already created 
+     */
     public function create_tables() {
-      //Prepare the table if it is not already created
       $query = "CREATE TABLE IF NOT EXISTS `bookings` (
         `bookingRef` varchar(18) NOT NULL PRIMARY KEY,
         `custName` varchar(30) NOT NULL,
@@ -45,7 +51,6 @@
         `status` varchar(15) NOT NULL DEFAULT 'unassigned');";
 
       @mysqli_query($this->conn, $query);
-      //  or die("<p>Table creation script failed.</p>");
     }
 
     public function save($booking) {
@@ -63,12 +68,13 @@
         '{$booking['bookingTime']}');";
 
       @mysqli_query($this->conn, $query);
-      // or die("<p>insert script failed.</p>");
     }
 
-    // This function will return a resultset containing 
-    // all bookings where pickupTime is between 
-    // the current time and 2 hours from the current time
+    /**
+     * This function will return a resultset containing 
+     * all bookings where pickupTime is between 
+     * the current time and 2 hours from the current time
+     */
     public function getBookings() {
       $query = "SELECT * FROM bookings 
         WHERE status = 'unassigned'
@@ -76,15 +82,17 @@
         AND pickupTime > (CURRENT_TIMESTAMP())";
 
       $result = @mysqli_query($this->conn, $query);
-      // or die("<p>select all script failed.</p>");
 
       return $result;
     }
 
-    // This function will update a bookings status with the 
-    // given status if the bookingRef matched a booking
+    /**
+     * This function will update a bookings status with the 
+     * given status if the bookingRef matched a booking
+     */
     public function updateBookingStatus($bookingRef, $status) {
 
+      // First check that the booking exists
       $bookingExists = $this->getBooking($bookingRef);
 
       if ($bookingExists) {
@@ -94,25 +102,27 @@
           AND status = 'unassigned';"; 
   
         @mysqli_query($this->conn, $query);
-        // or die("<p>insert script failed.</p>");
       }
       return $bookingExists;
     }
 
-    // Returns true if connection is active
-    // or false if connection is dead
+    /**
+     * Returns true if connection is active
+     * or false if connection is dead
+     */
     public function isConnected() {
       return $this->conn;
     }
 
-    // This function takes a bookingRed and will 
-    // return 1 if booking exists or 0 if not
+    /**
+     * This function takes a bookingRed and will 
+     * return 1 if booking exists or 0 if not
+     */
     public function getBooking($bookingRef) {
       $query = "SELECT * FROM bookings 
       WHERE bookingRef = '{$bookingRef}'";
 
       $result = @mysqli_query($this->conn, $query);
-      // or die("<p>insert script failed.</p>");
 
       return mysqli_num_rows($result);
     }

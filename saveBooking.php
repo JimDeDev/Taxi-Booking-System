@@ -1,4 +1,10 @@
 <?php
+    /**
+    * Web Development Assignment 2 - S1 2019
+    * Name: Jaime king 
+    * ID: 16959932  
+    * This php file is used to save bookings to the database
+    */
     require("databaseManager.php");
 
     $db = new databaseManager();
@@ -8,7 +14,7 @@
         date_default_timezone_set('Pacific/Auckland');
 
         // Creating an array to represent the booking so it 
-        // can be returned as JSON.
+        // can be returned as JSON and passed to the database manager.
         $booking = array(
             'bookingRef'   => uniqid("BID_"),
             'custName'     => $_POST['custName'],
@@ -24,6 +30,7 @@
 
         // Saving the booking to the database
         $db->save($booking);
+        
         // Returning the booking as JSON
         echo json_encode($booking);
     } else {

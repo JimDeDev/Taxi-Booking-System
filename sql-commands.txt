@@ -1,6 +1,8 @@
-##### REMEMBER TO CHANGE THIS TO TXT BEFORE SUBMISSION ######
+# Web Development Assignment 2 - S1 2019
+# Name: Jaime king
+# ID: 16959932
 
-# SQL Commands
+# SQL Commands used 
 
 ## Bookings Table Creation
 CREATE TABLE IF NOT EXISTS `bookings` (
@@ -16,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `bookingTime` datetime NOT NULL,
   `status` varchar(15) NOT NULL DEFAULT 'unassigned');
 
-  ## Example Booking Insert (Missing status as it isautomatically populated)
+  ## Example Booking Insert (Missing status as it is automatically populated)
   INSERT INTO `bookings`(
     `custName`,
     `custPhone`,

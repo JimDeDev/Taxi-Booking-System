@@ -1,4 +1,8 @@
 /**
+* Web Development Assignment 2 - S1 2019
+ * Name: Jaime king 
+ * ID: 16959932  
+ * 
  * This file is used on the booking.html page.
  * it contains functions such as form validation
  * and saveBooking
@@ -14,10 +18,16 @@ var messageDiv = document.getElementById('message');
 function submitBooking() {
     console.log("submitBooking called");
 
+    // Getting the form data 
     const formItems = document.forms.bookingForm;
+
+    // errors array for storing any validation error messages
     var errors = [];
+
+    // Get current time to compare against input time
     const currentTime = new Date();
 
+    // First reset the borders incase this is the second submit attempt
     resetFormBorders();
 
     if (formItems.custName.value == "") {
@@ -52,11 +62,9 @@ function submitBooking() {
 
     if (formItems.pickupDate.value != "" && formItems.pickupTime.value != "") {
 
-        // Verifying that the given date and time is past the current time
         var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
-
-        console.log('years ' + (inputDate.getFullYear() < currentTime.getFullYear()));
         
+        // Verifying that the given date and time is past the current time
         if (inputDate < currentTime) {
             errors.push('Pickup time must be in the future.');
             document.getElementById('pickupDate').style.borderColor = 'red';
@@ -68,8 +76,8 @@ function submitBooking() {
         document.getElementById('pickupTime').style.borderColor = 'red';
     }
 
+    // If errors array is empty then booking is valid
     if (errors.length == 0) {
-        console.log("Saving to DB");
         saveBooking(formItems);
     } else {
         messageDiv.innerHTML = "";
@@ -94,6 +102,11 @@ function submitBooking() {
     }
 }
 
+/**
+ * This function is called by the submitBooking function 
+ * It will send an XHR request with the booking information to the server 
+ * and save it to the database
+ */
 function saveBooking(formItems) {
     formData = new FormData(formItems);
 
@@ -103,6 +116,10 @@ function saveBooking(formItems) {
     xHRObject.send(formData);
 }
 
+/**
+ * This function is called by the XHR object from saveBooking
+ * it will update the booking page with the result from the server
+ */
 function processBookingResponse() {
 
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
@@ -122,12 +139,14 @@ function processBookingResponse() {
         // Create date object to extract time and date
         var date = new Date(booking.pickupTime);
 
+        // Create and add success message to the screen
         var messageElement = document.createElement('p');
         messageElement.innerHTML = "Thank you! Your booking reference  number  is <b>" 
         + booking.bookingRef + ".</b><br> You will be picked up in front of your provided address at <b>" 
         + date.toLocaleTimeString() + "</b> on the <b>" + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ".</b>";
         messageDiv.appendChild(messageElement);
 
+        // Create and add new booking button to the screen
         var newBookingButton = document.createElement('input');
         newBookingButton.setAttribute('type', 'button');
         newBookingButton.setAttribute('onclick', 'location.reload()');
