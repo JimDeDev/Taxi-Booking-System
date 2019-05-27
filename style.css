@@ -78,13 +78,22 @@ a {
     font-weight: bold;
 }
 
+.error-message {
+  color: #D8000C;
+}
+
   input[type=number], [type=date], input[type=time], [type=text],  select {
     width: 100%;
     padding: 12px 20px;
-    margin: 8px;
+    margin: 8px 8px 8px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+  }
+
+  .required:after {
+    content: '*';
+    color: red;
   }
   
   input[type=button] {
@@ -92,7 +101,7 @@ a {
     background-color: #4C9F70;
     color: white;
     padding: 14px 20px;
-    margin: 8px;
+    margin: 8px 8px 8px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;

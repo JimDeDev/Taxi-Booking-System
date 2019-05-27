@@ -15,16 +15,13 @@
         </div>
         <div id= "content" class="content">
             <h1>Make A Booking</h1>
-            <div id="message"> 
-                <p>Fill out the form below to request a cab</p>
 
-            </div>
             <form name="bookingForm" id="bookingForm">
                 <label class="form-title">Customer Details</label><br>
-                <label for="custName">Name: </label>
+                <label for="custName" class="required">Name: </label>
                 <input type="text" id="custName" name="custName" maxlength="30">
                 <br>
-                <label for="custPhone">Phone: </label>
+                <label for="custPhone" class="required">Phone: </label>
                 <input type="text" id="custPhone" name="custPhone" maxlength="15">
                 <br><br>
     
@@ -32,30 +29,31 @@
                 <label for="unitNumber">Unit Number: </label>
                 <input type="text" id="unitNumber" name="unitNumber" maxlength="5">
                 <br>
-                <label for="streetNumber">Street Number: </label>
+                <label for="streetNumber" class="required">Street Number: </label>
                 <input type="text" id="streetNumber" name="streetNumber" maxlength="5">
                 <br>
-                <label for="streetName">Street Name: </label>
+                <label for="streetName" class="required">Street Name: </label>
                 <input type="text" id="streetName" name="streetName" maxlength="15">
                 <br>
-                <label for="suburb">Suburb: </label>
+                <label for="suburb" class="required">Suburb: </label>
                 <input type="text" id="suburb" name="suburb" maxlength="20">
                 <br><br>
     
                 <label class="form-title">Destination</label><br>
-                <label for="destSuburb">Suburb: </label>
+                <label for="destSuburb" class="required">Suburb: </label>
                 <input type="text" id="destSuburb" name="destSuburb" maxlength="20">
                 <br><br>
     
                 <label class="form-title">Details</label><br>
-                <label for="pickupDate">Pickup Date: </label>
+                <label for="pickupDate" class="required">Pickup Date: </label>
                 <input type="date" id="pickupDate" name="pickupDate">
                 <br>
-                <label for="pickupTime">Pickup Time: (24 Hour)</label>
+                <label for="pickupTime" class="required">Pickup Time: (24 Hour)</label>
                 <input type="time" id="pickupTime" name="pickupTime">
                 <br>
                 <input type="button" value="Make Booking" onclick="submitBooking()">
             </form>
+            <div id="message"></div>
         </div>
     </body>
 </html>

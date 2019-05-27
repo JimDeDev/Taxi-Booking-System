@@ -31,27 +31,25 @@ function assignTaxi() {
     } else console.log('XHR error'); 
 }
 
+// This function is called by the XHR object when its state changes
+// It will update the message area with the appropriate message
 function assignResponse() {
-
-
-
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
 
         // First clear the message area
         messageDiv.innerHTML = "";
-        console.log(xHRObject.responseText);
-        console.log(xHRObject.status);
 
         // Create the message element
         var bookingMessage = document.createElement('p');
         
         if (xHRObject.responseText != '0') {
-            bookingMessage.style.color = 'unset';
-            bookingMessage.innerText = xHRObject.responseText + ' has been successfully assigned.';
+            bookingMessage.innerText = 'The  booking request ' + xHRObject.responseText + ' has been properly assigned.';
         } else {
-            bookingMessage.style.color = 'red';
+            bookingMessage.className = 'error-message';
             bookingMessage.innerText = 'There are no bookings matching that reference.';
         }
+
+        document.getElementById('bookingRef').value = '';
         
         //Append it to the message div
         messageDiv.appendChild(bookingMessage);
@@ -64,16 +62,15 @@ function assignResponse() {
 
         // If there was a server error then an error will be shown 
         var errorMessage = document.createElement('p');
-        errorMessage.innerHTML = "There was an error processing your request. Please retry in a few minutes.";
-        errorMessage.style.color = "red";
+        errorMessage.innerText = "There was an error processing your request. Please retry in a few minutes.";
+        errorMessage.className = 'error-message';
         messageDiv.appendChild(errorMessage);
     }
 }
-
+// This function is called by the XHR object when its state changes
+// It will update the booking table with the correct bookings
 function updateBookingsList() {
-
     var bookingsTable = document.getElementById('bookings');
-
     if ((xHRObject.readyState == 4) && (xHRObject.status == 200)) {
 
         bookings = JSON.parse(xHRObject.responseText);

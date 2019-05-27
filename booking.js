@@ -15,38 +15,38 @@ function submitBooking() {
     console.log("submitBooking called");
 
     const formItems = document.forms.bookingForm;
-    let valid = true;
+    var errors = [];
     const currentTime = new Date();
 
     resetFormBorders();
 
     if (formItems.custName.value == "") {
-        valid = false;
+        errors.push('Customer name is required.');
         document.getElementById('custName').style.borderColor = 'red';
     }
 
     if (formItems.custPhone.value == "") {
-        valid = false;
+        errors.push('Customer phone is required.');
         document.getElementById('custPhone').style.borderColor = 'red';
     }
 
     if (formItems.streetNumber.value == "") {
-        valid = false;
+        errors.push('Street number is required.');
         document.getElementById('streetNumber').style.borderColor = 'red';
     }
 
     if (formItems.streetName.value == "") {
-        valid = false;
+        errors.push('Street name is required.');
         document.getElementById('streetName').style.borderColor = 'red';
     }
 
     if (formItems.suburb.value == "") {
-        valid = false;
+        errors.push('Pickup suburb is required.');
         document.getElementById('suburb').style.borderColor = 'red';
     }
 
     if (formItems.destSuburb.value == "") {
-        valid = false;
+        errors.push('Destination suburb is required.');
         document.getElementById('destSuburb').style.borderColor = 'red';
     }
 
@@ -54,28 +54,43 @@ function submitBooking() {
 
         // Verifying that the given date and time is past the current time
         var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
+
+        console.log('years ' + (inputDate.getFullYear() < currentTime.getFullYear()));
+        
         if (inputDate < currentTime) {
-            valid = false;
+            errors.push('Pickup time must be in the future.');
             document.getElementById('pickupDate').style.borderColor = 'red';
             document.getElementById('pickupTime').style.borderColor = 'red';
         }
-
     } else {
-        valid = false;
+        errors.push('Pickup date and time is required.');
         document.getElementById('pickupDate').style.borderColor = 'red';
         document.getElementById('pickupTime').style.borderColor = 'red';
     }
 
-    if (valid) {
+    if (errors.length == 0) {
         console.log("Saving to DB");
         saveBooking(formItems);
     } else {
         messageDiv.innerHTML = "";
-        var errorMessage = document.createElement('p');
-        errorMessage.innerText = "There was an issue with your details, please fix any fields marked in red and try again.";
-        errorMessage.style.color = "red";
 
-        messageDiv.appendChild(errorMessage);
+        var errorTitle = document.createElement('p');
+        errorTitle.innerText = "There was one or more issues with your details, please fix the following errors and try again.";
+        errorTitle.className = 'error-message';
+        messageDiv.appendChild(errorTitle);
+
+        // Create the list to hold error messages
+        var list = document.createElement('ul');
+        
+        // Add all errors to the error list
+        errors.map((error) => {
+            var errorMessage = document.createElement('li');
+            errorMessage.innerText = error;
+            errorMessage.className = 'error-message';
+            
+            list.appendChild(errorMessage);
+        })
+        messageDiv.appendChild(list);
     }
 }
 
