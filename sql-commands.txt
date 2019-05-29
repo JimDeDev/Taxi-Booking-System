@@ -36,6 +36,7 @@ SELECT * FROM bookings
         WHERE status = 'unassigned'
         AND pickupTime < (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR)
         AND pickupTime > (CURRENT_TIMESTAMP())
+        ORDER BY pickupTime 
 
 ## Command to update status of booking (given a status and bookingRef)
 UPDATE bookings 

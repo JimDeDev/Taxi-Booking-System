@@ -17,7 +17,6 @@
 
         // Return bookingRef if booking exists 
         // or null if it doesn't match any entries
-
         if ($success == '1') {
             echo $bookingRef;
         } else {

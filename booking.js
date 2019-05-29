@@ -10,8 +10,8 @@
 
 var xHRObject = createRequest();
 
-// Preloading the date field with today
-setDateToToday();
+// Preloading the date field with correct dates
+setDate();
 var messageDiv = document.getElementById('message');
 
 // This function will validate the inputs and save to db if valid
@@ -30,48 +30,71 @@ function submitBooking() {
     // First reset the borders incase this is the second submit attempt
     resetFormBorders();
 
+    // All the following validation statements are checking if the field is empty 
+    // and then checking the value against a regular expression
     if (formItems.custName.value == "") {
         errors.push('Customer name is required.');
+        document.getElementById('custName').style.borderColor = 'red';
+    } else if (formItems.custName.value.match(/[^a-zA-Z ]/g)) {
+        errors.push('Customer name can only contain letters.');
         document.getElementById('custName').style.borderColor = 'red';
     }
 
     if (formItems.custPhone.value == "") {
         errors.push('Customer phone is required.');
         document.getElementById('custPhone').style.borderColor = 'red';
+    } else if (formItems.custPhone.value.match(/[^0-9- +]/g)) {
+        errors.push('Customer phone can only contain 0-9, -, +, and space.');
+        document.getElementById('custPhone').style.borderColor = 'red';
+    }
+
+    if (formItems.unitNumber.value.match(/[^0-9]/g)) {
+        errors.push('Unit number can only contain 0-9');
+        document.getElementById('unitNumber').style.borderColor = 'red';
     }
 
     if (formItems.streetNumber.value == "") {
         errors.push('Street number is required.');
+        document.getElementById('streetNumber').style.borderColor = 'red';
+    } else if (formItems.streetNumber.value.match(/[^0-9]/g)) {
+        errors.push('Street number can only contain 0-9.');
         document.getElementById('streetNumber').style.borderColor = 'red';
     }
 
     if (formItems.streetName.value == "") {
         errors.push('Street name is required.');
         document.getElementById('streetName').style.borderColor = 'red';
+    } else if (formItems.streetName.value.match(/[^A-Za-z ]/g)) {
+        errors.push('Street name can only contain letters and spaces.');
+        document.getElementById('streetName').style.borderColor = 'red';
     }
 
     if (formItems.suburb.value == "") {
         errors.push('Pickup suburb is required.');
+        document.getElementById('suburb').style.borderColor = 'red';
+    } else if (formItems.suburb.value.match(/[^A-Za-z ]/g)) {
+        errors.push('Suburb can only contain letters and spaces.');
         document.getElementById('suburb').style.borderColor = 'red';
     }
 
     if (formItems.destSuburb.value == "") {
         errors.push('Destination suburb is required.');
         document.getElementById('destSuburb').style.borderColor = 'red';
+    } else if (formItems.destSuburb.value.match(/[^A-Za-z ]/g)) {
+        errors.push('Destination Suburb can only contain letters and spaces.');
+        document.getElementById('destSuburb').style.borderColor = 'red';
     }
 
-    if (formItems.pickupDate.value != "" && formItems.pickupTime.value != "") {
+    var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
 
-        var inputDate = new Date(formItems.pickupDate.value + ' ' + formItems.pickupTime.value);
-        
-        // Verifying that the given date and time is past the current time
-        if (inputDate < currentTime) {
-            errors.push('Pickup time must be in the future.');
-            document.getElementById('pickupDate').style.borderColor = 'red';
-            document.getElementById('pickupTime').style.borderColor = 'red';
-        }
-    } else {
+    if (formItems.pickupDate.value == "" || formItems.pickupTime.value == "") {
         errors.push('Pickup date and time is required.');
+        document.getElementById('pickupDate').style.borderColor = 'red';
+        document.getElementById('pickupTime').style.borderColor = 'red';
+
+    } else if (inputDate < currentTime) {
+        // Verifying that the given date and time is past the current time
+        errors.push('Pickup time must be in the future.');
         document.getElementById('pickupDate').style.borderColor = 'red';
         document.getElementById('pickupTime').style.borderColor = 'red';
     }
@@ -153,11 +176,15 @@ function processBookingResponse() {
         newBookingButton.setAttribute('value', 'Make Another Booking');
         messageDiv.appendChild(newBookingButton);
 
-    } else {
+    }  else if ((xHRObject.readyState == 4) && (xHRObject.status == 500)) {
+
+        // First clear the message area
+        messageDiv.innerHTML = "";
+
         // If there was a server error then an error will be shown 
         var errorMessage = document.createElement('p');
-        errorMessage.innerHTML = "There was an error processing your request. Please retry in a few minutes.";
-        errorMessage.style.color = "red";
+        errorMessage.innerText = "There was an error processing your request. Please retry in a few minutes.";
+        errorMessage.className = 'error-message';
         messageDiv.appendChild(errorMessage);
     }
 }
@@ -166,6 +193,7 @@ function processBookingResponse() {
 function resetFormBorders() {
     document.getElementById('custName').style.borderColor = '#ccc';
     document.getElementById('custPhone').style.borderColor = '#ccc';
+    document.getElementById('unitNumber').style.borderColor = '#ccc';
     document.getElementById('streetNumber').style.borderColor = '#ccc';
     document.getElementById('streetName').style.borderColor = '#ccc';
     document.getElementById('suburb').style.borderColor = '#ccc';
@@ -175,12 +203,15 @@ function resetFormBorders() {
 }
 
 // This function is called after page load to set dateField value and min to today
-function setDateToToday() {
+function setDate() {
     var date = new Date();
     var todayString = date.getFullYear() + "-" + addLeadingZero(date.getMonth() + 1) + "-" + addLeadingZero(date.getDate());
     var dateField = document.getElementById('pickupDate');
     dateField.value = todayString;
     dateField.setAttribute('min', todayString);
+    console.log(todayString);
+    console.log(date.getFullYear() + '-12-31');
+    dateField.setAttribute('max', date.getFullYear() + '-12-31')
 
 }
 // This helper function appends leading 0s to date segments

@@ -79,7 +79,8 @@
       $query = "SELECT * FROM bookings 
         WHERE status = 'unassigned'
         AND pickupTime < (CURRENT_TIMESTAMP() + INTERVAL 2 HOUR)
-        AND pickupTime > (CURRENT_TIMESTAMP())";
+        AND pickupTime > (CURRENT_TIMESTAMP())
+        ORDER BY pickupTime";
 
       $result = @mysqli_query($this->conn, $query);
 

@@ -132,5 +132,15 @@ function updateBookingsList() {
 
             bookingsTable.appendChild(tr);
         })
+    } else if ((xHRObject.readyState == 4) && (xHRObject.status == 500)) {
+
+        // First clear the message area
+        messageDiv.innerHTML = "";
+
+        // If there was a server error then an error will be shown 
+        var errorMessage = document.createElement('p');
+        errorMessage.innerText = "There was an error processing your request. Please retry in a few minutes.";
+        errorMessage.className = 'error-message';
+        messageDiv.appendChild(errorMessage);
     }
 }
