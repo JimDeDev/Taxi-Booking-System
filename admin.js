@@ -59,10 +59,10 @@ function assignResponse() {
             bookingMessage.innerText = 'There are no bookings matching that reference.';
         } else {
             bookingMessage.innerText = 'The  booking request ' + xHRObject.responseText + ' has been properly assigned.';
+            document.getElementById('bookingRef').value = '';
         }
 
         // Emptying the bookingRef text field
-        document.getElementById('bookingRef').value = '';
         
         //Append it to the message div
         messageDiv.appendChild(bookingMessage);

@@ -166,7 +166,7 @@ function processBookingResponse() {
         var messageElement = document.createElement('p');
         messageElement.innerHTML = "Thank you! Your booking reference  number  is <b>" 
         + booking.bookingRef + ".</b><br> You will be picked up in front of your provided address at <b>" 
-        + date.toLocaleTimeString() + "</b> on the <b>" + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ".</b>";
+        + date.toLocaleTimeString() + "</b> on the <b>" + addLeadingZero(date.getDate()) + '/' + addLeadingZero(date.getMonth() + 1) + '/' + date.getFullYear() + ".</b>";
         messageDiv.appendChild(messageElement);
 
         // Create and add new booking button to the screen
